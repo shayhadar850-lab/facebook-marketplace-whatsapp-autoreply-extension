@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>מענה Marketplace</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>מענה אוטומטי</h1>
+        <label class="switch">
+          <input id="enabled" type="checkbox">
+          <span>פעיל</span>
+        </label>
+      </header>
+
+      <section class="panel">
+        <label>
+          מספר וואטסאפ
+          <input id="whatsappNumber" type="tel" dir="ltr" placeholder="053-405-2865">
+        </label>
+        <div class="grid">
+          <label>
+            בדיקה כל
+            <input id="scanIntervalSeconds" type="number" min="8" max="300" step="1">
+          </label>
+          <label>
+            השהיה לפני שליחה
+            <input id="sendDelaySeconds" type="number" min="1" max="30" step="1">
+          </label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>5 נוסחי תגובה</h2>
+        <p>אפשר להשתמש ב-<code>{whatsapp}</code> במקום שבו יופיע הקישור.</p>
+        <div id="variations"></div>
+      </section>
+
+      <section class="panel status">
+        <div><strong>סטטוס:</strong> <span id="status">טוען...</span></div>
+        <div><strong>נשלחו:</strong> <span id="sentCount">0</span></div>
+        <div id="lastError" class="error"></div>
+      </section>
+
+      <footer>
+        <button id="save" type="button">שמירה</button>
+        <button id="scanNow" type="button" class="secondary">בדוק עכשיו</button>
+      </footer>
+    </main>
+    <script src="utils.content.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
