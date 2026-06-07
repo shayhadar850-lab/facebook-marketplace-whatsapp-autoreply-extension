@@ -131,9 +131,29 @@
         const text = (button.innerText || button.textContent || "").trim();
         const rect = button.getBoundingClientRect();
         const nearComposer = Math.abs(rect.top - editorRect.top) < 120 || rect.top > editorRect.top - 40;
-        return nearComposer && /שלח|שליחה|Send|Press Enter/i.test(`${aria} ${text}`);
+        return nearComposer && /יש ללחוץ על Enter לשליחה|שלח|שליחה|Send|Press Enter/i.test(`${aria} ${text}`);
+      })
+      .sort((a, b) => {
+        const exactA = /יש ללחוץ על Enter לשליחה/.test(`${a.getAttribute("aria-label") || ""} ${a.innerText || ""}`) ? 0 : 1;
+        const exactB = /יש ללחוץ על Enter לשליחה/.test(`${b.getAttribute("aria-label") || ""} ${b.innerText || ""}`) ? 0 : 1;
+        return exactA - exactB;
       });
     return buttons[0] || null;
+  }
+
+  async function pressComposerEnter(editor) {
+    editor.focus();
+    for (const type of ["keydown", "keypress", "keyup"]) {
+      editor.dispatchEvent(new KeyboardEvent(type, {
+        key: "Enter",
+        code: "Enter",
+        keyCode: 13,
+        which: 13,
+        bubbles: true,
+        cancelable: true,
+      }));
+    }
+    await sleep(300);
   }
 
   function findConversationRoot(editor) {
@@ -192,6 +212,7 @@
     if (!sendButton) throw new Error("לא נמצא כפתור שליחה לאחר הכנסת הטקסט");
 
     sendButton.click();
+    await pressComposerEnter(editor);
     await completeThread(threadKey, reply);
     await sleep(1000);
     await closeConversation(editor);

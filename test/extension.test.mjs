@@ -44,3 +44,16 @@ test("content script closes the chat after a successful send", () => {
   assert.match(content, /closeConversation/);
   assert.match(content, /await closeConversation\(editor\)/);
 });
+
+test("content script recognizes Facebook's Hebrew Enter-to-send button", () => {
+  const content = fs.readFileSync(path.join(root, "content.js"), "utf8");
+
+  assert.match(content, /יש ללחוץ על Enter לשליחה/);
+});
+
+test("content script falls back to pressing Enter from the composer", () => {
+  const content = fs.readFileSync(path.join(root, "content.js"), "utf8");
+
+  assert.match(content, /pressComposerEnter/);
+  assert.match(content, /await pressComposerEnter\(editor\)/);
+});
